@@ -1,0 +1,326 @@
+{
+    "definition": {
+        "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+        "actions": {
+            "For_each": {
+                "actions": {
+                    "Condition": {
+                        "actions": {
+                            "For_each_2": {
+                                "actions": {
+                                    "Condition_2": {
+                                        "actions": {
+                                            "For_each_3": {
+                                                "actions": {
+                                                    "Condition_3": {
+                                                        "actions": {
+                                                            "List_folder_4": {
+                                                                "inputs": {
+                                                                    "host": {
+                                                                        "connection": {
+                                                                            "name": "@parameters('$connections')['sharepointonline_1']['connectionId']"
+                                                                        }
+                                                                    },
+                                                                    "method": "get",
+                                                                    "path": "/datasets/@{encodeURIComponent(encodeURIComponent('https://celebaltech.sharepoint.com/'))}/folders/@{encodeURIComponent(items('For_each_3')?['Id'])}"
+                                                                },
+                                                                "runAfter": {},
+                                                                "type": "ApiConnection"
+                                                            }
+                                                        },
+                                                        "else": {
+                                                            "actions": {
+                                                                "Create_blob_3": {
+                                                                    "inputs": {
+                                                                        "body": "@body('Get_file_content_3')",
+                                                                        "host": {
+                                                                            "connection": {
+                                                                                "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                                            }
+                                                                        },
+                                                                        "method": "post",
+                                                                        "path": "/datasets/default/files",
+                                                                        "queries": {
+                                                                            "folderPath": "/demo-01@{items('For_each_2')?['Path']}",
+                                                                            "name": "@items('For_each_3')?['DisplayName']",
+                                                                            "queryParametersSingleEncoded": true
+                                                                        }
+                                                                    },
+                                                                    "runAfter": {
+                                                                        "Get_file_content_3": [
+                                                                            "Succeeded"
+                                                                        ]
+                                                                    },
+                                                                    "runtimeConfiguration": {
+                                                                        "contentTransfer": {
+                                                                            "transferMode": "Chunked"
+                                                                        }
+                                                                    },
+                                                                    "type": "ApiConnection"
+                                                                },
+                                                                "Get_file_content_3": {
+                                                                    "inputs": {
+                                                                        "host": {
+                                                                            "connection": {
+                                                                                "name": "@parameters('$connections')['sharepointonline_1']['connectionId']"
+                                                                            }
+                                                                        },
+                                                                        "method": "get",
+                                                                        "path": "/datasets/@{encodeURIComponent(encodeURIComponent('https://celebaltech.sharepoint.com/'))}/files/@{encodeURIComponent(items('For_each_3')?['Id'])}/content",
+                                                                        "queries": {
+                                                                            "inferContentType": true
+                                                                        }
+                                                                    },
+                                                                    "runAfter": {},
+                                                                    "type": "ApiConnection"
+                                                                }
+                                                            }
+                                                        },
+                                                        "expression": {
+                                                            "and": [
+                                                                {
+                                                                    "equals": [
+                                                                        "@items('For_each_3')?['IsFolder']",
+                                                                        "@true"
+                                                                    ]
+                                                                }
+                                                            ]
+                                                        },
+                                                        "runAfter": {},
+                                                        "type": "If"
+                                                    }
+                                                },
+                                                "foreach": "@body('List_folder_3')",
+                                                "runAfter": {
+                                                    "List_folder_3": [
+                                                        "Succeeded"
+                                                    ]
+                                                },
+                                                "type": "Foreach"
+                                            },
+                                            "List_folder_3": {
+                                                "inputs": {
+                                                    "host": {
+                                                        "connection": {
+                                                            "name": "@parameters('$connections')['sharepointonline_1']['connectionId']"
+                                                        }
+                                                    },
+                                                    "method": "get",
+                                                    "path": "/datasets/@{encodeURIComponent(encodeURIComponent('https://celebaltech.sharepoint.com/'))}/folders/@{encodeURIComponent(items('For_each_2')?['Id'])}"
+                                                },
+                                                "runAfter": {},
+                                                "type": "ApiConnection"
+                                            }
+                                        },
+                                        "else": {
+                                            "actions": {
+                                                "Create_blob_2": {
+                                                    "inputs": {
+                                                        "body": "@body('Get_file_content_2')",
+                                                        "host": {
+                                                            "connection": {
+                                                                "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                                            }
+                                                        },
+                                                        "method": "post",
+                                                        "path": "/datasets/default/files",
+                                                        "queries": {
+                                                            "folderPath": "/demo-01@{items('For_each')?['Path']}",
+                                                            "name": "@items('For_each_2')?['DisplayName']",
+                                                            "queryParametersSingleEncoded": true
+                                                        }
+                                                    },
+                                                    "runAfter": {
+                                                        "Get_file_content_2": [
+                                                            "Succeeded"
+                                                        ]
+                                                    },
+                                                    "runtimeConfiguration": {
+                                                        "contentTransfer": {
+                                                            "transferMode": "Chunked"
+                                                        }
+                                                    },
+                                                    "type": "ApiConnection"
+                                                },
+                                                "Get_file_content_2": {
+                                                    "inputs": {
+                                                        "host": {
+                                                            "connection": {
+                                                                "name": "@parameters('$connections')['sharepointonline_1']['connectionId']"
+                                                            }
+                                                        },
+                                                        "method": "get",
+                                                        "path": "/datasets/@{encodeURIComponent(encodeURIComponent('https://celebaltech.sharepoint.com/'))}/files/@{encodeURIComponent(items('For_each_2')?['Id'])}/content",
+                                                        "queries": {
+                                                            "inferContentType": true
+                                                        }
+                                                    },
+                                                    "runAfter": {},
+                                                    "type": "ApiConnection"
+                                                }
+                                            }
+                                        },
+                                        "expression": {
+                                            "and": [
+                                                {
+                                                    "equals": [
+                                                        "@items('For_each_2')?['IsFolder']",
+                                                        "@true"
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        "runAfter": {},
+                                        "type": "If"
+                                    }
+                                },
+                                "foreach": "@body('List_folder_2')",
+                                "runAfter": {
+                                    "List_folder_2": [
+                                        "Succeeded"
+                                    ]
+                                },
+                                "type": "Foreach"
+                            },
+                            "List_folder_2": {
+                                "inputs": {
+                                    "host": {
+                                        "connection": {
+                                            "name": "@parameters('$connections')['sharepointonline_1']['connectionId']"
+                                        }
+                                    },
+                                    "method": "get",
+                                    "path": "/datasets/@{encodeURIComponent(encodeURIComponent('https://celebaltech.sharepoint.com/'))}/folders/@{encodeURIComponent(items('For_each')?['Id'])}"
+                                },
+                                "runAfter": {},
+                                "type": "ApiConnection"
+                            }
+                        },
+                        "else": {
+                            "actions": {
+                                "Create_blob": {
+                                    "inputs": {
+                                        "body": "@body('Get_file_content')",
+                                        "host": {
+                                            "connection": {
+                                                "name": "@parameters('$connections')['azureblob']['connectionId']"
+                                            }
+                                        },
+                                        "method": "post",
+                                        "path": "/datasets/default/files",
+                                        "queries": {
+                                            "folderPath": "/demo-01@{items('For_each')?['Path']}",
+                                            "name": "@items('For_each')?['DisplayName']",
+                                            "queryParametersSingleEncoded": true
+                                        }
+                                    },
+                                    "runAfter": {
+                                        "Get_file_content": [
+                                            "Succeeded",
+                                            "Skipped",
+                                            "TimedOut",
+                                            "Failed"
+                                        ]
+                                    },
+                                    "runtimeConfiguration": {
+                                        "contentTransfer": {
+                                            "transferMode": "Chunked"
+                                        }
+                                    },
+                                    "type": "ApiConnection"
+                                },
+                                "Get_file_content": {
+                                    "inputs": {
+                                        "host": {
+                                            "connection": {
+                                                "name": "@parameters('$connections')['sharepointonline_1']['connectionId']"
+                                            }
+                                        },
+                                        "method": "get",
+                                        "path": "/datasets/@{encodeURIComponent(encodeURIComponent('https://celebaltech.sharepoint.com/'))}/files/@{encodeURIComponent(items('For_each')?['Id'])}/content",
+                                        "queries": {
+                                            "inferContentType": true
+                                        }
+                                    },
+                                    "runAfter": {},
+                                    "type": "ApiConnection"
+                                }
+                            }
+                        },
+                        "expression": {
+                            "and": [
+                                {
+                                    "equals": [
+                                        "@items('For_each')?['IsFolder']",
+                                        "@true"
+                                    ]
+                                }
+                            ]
+                        },
+                        "runAfter": {},
+                        "type": "If"
+                    }
+                },
+                "foreach": "@body('List_folder')",
+                "runAfter": {
+                    "List_folder": [
+                        "Succeeded",
+                        "Failed",
+                        "Skipped",
+                        "TimedOut"
+                    ]
+                },
+                "type": "Foreach"
+            },
+            "List_folder": {
+                "inputs": {
+                    "host": {
+                        "connection": {
+                            "name": "@parameters('$connections')['sharepointonline_1']['connectionId']"
+                        }
+                    },
+                    "method": "get",
+                    "path": "/datasets/@{encodeURIComponent(encodeURIComponent('https://celebaltech.sharepoint.com/'))}/folders/@{encodeURIComponent('%252fShared%2bDocuments%252fRenew%2bPower%2bLogic%2bApp')}"
+                },
+                "metadata": {
+                    "%252fShared%2bDocuments%252fRenew%2bPower%2bLogic%2bApp": "/Shared Documents/Renew Power Logic App"
+                },
+                "runAfter": {},
+                "type": "ApiConnection"
+            }
+        },
+        "contentVersion": "1.0.0.0",
+        "outputs": {},
+        "parameters": {
+            "$connections": {
+                "defaultValue": {},
+                "type": "Object"
+            }
+        },
+        "triggers": {
+            "Recurrence": {
+                "recurrence": {
+                    "frequency": "Hour",
+                    "interval": 3
+                },
+                "type": "Recurrence"
+            }
+        }
+    },
+    "parameters": {
+        "$connections": {
+            "value": {
+                "azureblob": {
+                    "connectionId": "/subscriptions/7133afd3-c71c-4f13-9320-ab6f3543c8c2/resourceGroups/Yash_RG/providers/Microsoft.Web/connections/azureblob",
+                    "connectionName": "azureblob",
+                    "id": "/subscriptions/7133afd3-c71c-4f13-9320-ab6f3543c8c2/providers/Microsoft.Web/locations/eastus/managedApis/azureblob"
+                },
+                "sharepointonline_1": {
+                    "connectionId": "/subscriptions/7133afd3-c71c-4f13-9320-ab6f3543c8c2/resourceGroups/Yash_RG/providers/Microsoft.Web/connections/sharepointonline",
+                    "connectionName": "sharepointonline",
+                    "id": "/subscriptions/7133afd3-c71c-4f13-9320-ab6f3543c8c2/providers/Microsoft.Web/locations/eastus/managedApis/sharepointonline"
+                }
+            }
+        }
+    }
+}
