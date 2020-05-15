@@ -1,5 +1,0 @@
-pip install azure-storage==0.30.0
-pip install azure.function
-
-import logging
-import pandas as pd

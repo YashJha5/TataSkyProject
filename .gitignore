@@ -1,7 +1,8 @@
+excel-test
 bin
 obj
 csx
-.vs
+.vscode
 edge
 Publish
 
